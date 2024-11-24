@@ -1,0 +1,4 @@
+user001,password,PUBLIC
+admin001,adminpassword,STAFF
+johndude,1234qwer,PUBLIC
+joe,wordpass,STAFF
