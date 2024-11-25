@@ -1,3 +1,7 @@
+/* Author: Christian Amoranto
+ * initial draft of Book class based on requiremnts doc 11/24/2024
+ */
+    
 public class Book {
     private String title;
     private String author;
