@@ -33,4 +33,14 @@ public class BookManager {
     public List<Book> getAllBooks() {
         return books;
     }
+
+    // Method to search for a book by ISBN
+    public Book searchBookByISBN(String ISBN) {
+        for (Book book : books) {
+            if (book.getISBN().equals(ISBN)) {
+                return book;
+            }
+        }
+        return null; // Book not found
+    }
 }

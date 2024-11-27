@@ -1,0 +1,116 @@
+/*
+ * Author: Andreas Sotiras 11/27/24
+ * Client handler. This will show how to call the client if the server is running.
+ * THIS NEEDS UPDATING... 
+ */
+import java.io.*;
+import java.net.*;
+
+public class ClientHandler extends Thread {
+    private Socket clientSocket;
+    private BookManager bookManager;
+
+    public ClientHandler(Socket socket, BookManager bookManager) {
+        this.clientSocket = socket;
+        this.bookManager = bookManager;
+    }
+
+    public void run() {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
+            String request;
+
+            while ((request = in.readLine()) != null) {
+                String[] parts = request.split(";");
+                String command = parts[0];
+
+                switch (command.toLowerCase()) {
+                    case "addbook":
+                        if (parts.length == 5) { // Format: addbook;title;author;genre;ISBN
+                            String title = parts[1];
+                            String author = parts[2];
+                            String genre = parts[3];
+                            String ISBN = parts[4];
+                            Book newBook = new Book(title, author, genre, ISBN);
+                            bookManager.addBook(newBook);
+                            out.println("Book added successfully.");
+                        } else {
+                            out.println("Invalid addbook command. Usage: addbook;title;author;genre;ISBN");
+                        }
+                        break;
+
+                    case "removebook":
+                        if (parts.length == 2) { // Format: removebook;ISBN
+                            String ISBN = parts[1];
+                            bookManager.removeBook(ISBN);
+                            out.println("Book removed successfully.");
+                        } else {
+                            out.println("Invalid removebook command. Usage: removebook;ISBN");
+                        }
+                        break;
+
+                    case "reserve":
+                        if (parts.length == 2) { // Format: reserve;ISBN
+                            String ISBN = parts[1];
+                            Book bookToReserve = bookManager.searchBookByISBN(ISBN);
+                            if (bookToReserve != null && bookToReserve.isAvailable() && !bookToReserve.isReserved()) {
+                                bookToReserve.setReserved(true);
+                                bookToReserve.setAvailable(false); // Mark as not available after reservation
+                                out.println("Book reserved successfully.");
+                            } else {
+                                out.println("Book could not be reserved. It may not be available or already reserved.");
+                            }
+                        } else {
+                            out.println("Invalid reserve command. Usage: reserve;ISBN");
+                        }
+                        break;
+
+                    case "renew":
+                        if (parts.length == 2) { // Format: renew;ISBN
+                            String ISBN = parts[1];
+                            Book bookToRenew = bookManager.searchBookByISBN(ISBN);
+                            if (bookToRenew != null && bookToRenew.isReserved()) {
+                                // Logic to renew the reservation (e.g., extend the reservation period)
+                                out.println("Book renewed successfully.");
+                            } else {
+                                out.println("Book could not be renewed. It may not be reserved.");
+                            }
+                        } else {
+                            out.println("Invalid renew command. Usage: renew;ISBN");
+                        }
+                        break;
+
+                    case "search":
+                        if (parts.length == 2) { // Format: search;title
+                            String title = parts[1];
+                            Book foundBook = bookManager.searchBook(title);
+                            if (foundBook != null) {
+                                out.println("Book found: " + foundBook);
+                            } else {
+                                out.println("Book not found.");
+                            }
+                        } else {
+                            out.println("Invalid search command. Usage: search;title");
+                        }
+                        break;
+
+                    case "exit":
+                        out.println("Closing connection.");
+                        return;
+
+                    default:
+                        out.println("Unknown command. Please try again.");
+                        break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
