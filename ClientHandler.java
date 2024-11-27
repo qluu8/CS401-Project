@@ -9,6 +9,7 @@ import java.net.*;
 public class ClientHandler extends Thread {
     private Socket clientSocket;
     private BookManager bookManager;
+    private static final String USERS_FILE = "users.txt";
 
     public ClientHandler(Socket socket, BookManager bookManager) {
         this.clientSocket = socket;
@@ -25,6 +26,21 @@ public class ClientHandler extends Thread {
                 String command = parts[0];
 
                 switch (command.toLowerCase()) {
+                    case "login":
+                    if (parts.length == 3) { // Format: login;username;password
+                        String username = parts[1];
+                        String password = parts[2];
+                        String role = parts[3];
+                        if (role != null) {
+                            out.println("Login successful! Role: " + role);
+                        } else {
+                            out.println("Invalid username or password!");
+                        }
+                    } else {
+                        out.println("Invalid login command. Usage: login;username;password");
+                    }
+                        break;
+
                     case "addbook":
                         if (parts.length == 5) { // Format: addbook;title;author;genre;ISBN
                             String title = parts[1];
