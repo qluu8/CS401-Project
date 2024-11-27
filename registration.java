@@ -112,11 +112,16 @@ public class registration {
                               java.time.LocalDate.now().plusWeeks(2), null);
         loanHistory.addLoan(loan1);
         loanHistory.viewLoanHistory();
+
+        //ADD BRANCH TO FRONT END FOR STAFF A.S.
     }
 
         // Message for public users
     private static void publicAccess() {
         System.out.println("Welcome, Public User!");
         System.out.println("You can view books or request loans.");
+
+        //ADD BRANCH TO FRONT END FOR PUBLIC USER A.S.
+        //CREATE CLASSES FOR THEM BOTH POSSIBLY
     }
 }
