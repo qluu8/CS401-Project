@@ -13,12 +13,12 @@ public class Loan {
     private LocalDate returnDate;
         private boolean isReserved;
     
-        public Loan(String bookTitle, String author, LocalDate loanDate, LocalDate dueDate, LocalDate returnDate) {
+        public Loan(String bookTitle, String author, LocalDate loanDate) {
             this.bookTitle = bookTitle;
             this.author = author;
             this.loanDate = loanDate;
             this.dueDate = loanDate.plusWeeks(2);
-            this.returnDate = returnDate;
+            this.returnDate = null;
         }
     
         public String getBookTitle() {
@@ -56,6 +56,12 @@ public class Loan {
             book.setReserved(true); // Update the book's reserved status
         } else {
             book.setReserved(false); // Clear the book's reserved status
+        }
+    }
+    //set return date only to be called when loan returned
+        public void setReturnDate() {
+            LocalDate currentDate = LocalDate.now();
+            this.returnDate=currentDate;
         }
     }
 
