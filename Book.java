@@ -2,7 +2,7 @@
  * initial draft of Book class based on requiremnts doc 11/24/2024
  * 
  * Edit by Quan Luu 11/27/2024
- * Added functions to set title, author, genre, and ISBN
+ * Added functions to set title, author, genre, and ISBN.
  */
     
 public class Book {

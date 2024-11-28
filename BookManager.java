@@ -4,7 +4,7 @@
  * And add based off what seems to be needed.
  * 
  * Edit: Quan Luu 11/27/2024
- * Added new variable bookCount. Made changes to addBook and removeBook. Added helper functions getBookCount, and bookExist.
+ * Added new variable bookCount to keep track of number of books. Made changes to addBook and removeBook. Added helper functions getBookCount, and bookExist.
  */
 import java.util.ArrayList;
 import java.util.List;
