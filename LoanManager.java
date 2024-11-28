@@ -6,6 +6,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.date;
 
 public class LoanManager {
     private List<Loan> loans; // List to manage active loans
@@ -15,10 +16,18 @@ public class LoanManager {
     }
 
     // Add a new loan
-    public Loan addLoan(Book  loan ) {
+    public void addLoan(Book  book ) {
         // logic to create and add a loan for the specified book
-
-        return null; 
+        LocalDate currentDate = LocalDate.now();
+        if(book.getisAvailable()){
+            book.setAvailable(false);
+            Loan recent= new Loan(book.getTitle(), book.getauthor(), currentDate);
+            this.loans.add(recent);
+        }
+        else{ 
+            out.system.println("book not found");//book not found
+      }
+    
     }
 
     // Search for a loan by ISBN
@@ -42,9 +51,17 @@ public class LoanManager {
     }
 
     // Return a loan
-    public Loan returnLoan(Book loan) {
-        // logic to return a loan
-  
-        return null; // Placeholder return
+    public void returnLoan(Book book) {
+       for (Loan loan : loans) {
+            if (loan.getTitle().equals(book.getTitle())) {
+                book.setAvailable(true); 
+                FeeCalculation due= new  FeeCalculation;
+                due.setDueDate();
+                double pay=0;
+                pay+=due.calculateFees(loan.getDueDate(),loan.getReturnDate());
+                loans.remove(loan); 
+                System.out.println(book.getTitle() + " returned.\n");
+                System.out.println("must pay "+ pay +" immediately\n");
+                return;
     }
 }
