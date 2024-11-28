@@ -9,11 +9,13 @@ import java.net.*;
 public class ClientHandler extends Thread {
     private Socket clientSocket;
     private BookManager bookManager;
+    private LoanManager loanManager;
     private static final String USERS_FILE = "users.txt";
 
     public ClientHandler(Socket socket, BookManager bookManager) {
         this.clientSocket = socket;
         this.bookManager = bookManager;
+        this.loanManager = loanManager;
     }
 
     public void run() {
@@ -81,15 +83,15 @@ public class ClientHandler extends Thread {
                         }
                         break;
 
-                    case "renew":
-                        if (parts.length == 2) { // Format: renew;ISBN
+                   case "renew": // Format: renew;ISBN
+                        if (parts.length == 2) {
                             String ISBN = parts[1];
-                            Book bookToRenew = bookManager.searchBookByISBN(ISBN);
-                            if (bookToRenew != null && bookToRenew.isReserved()) {
-                                bookToRenew.extendDueDate();
-                                out.println("Book renewed successfully. New Due Date: " + bookToRenew.getDueDate());
+                            Loan loanToRenew = loanManager.searchLoanByISBN(ISBN);
+                            if (loanToRenew != null) {
+                                loanToRenew.extendDueDate();
+                                out.println("Book renewed successfully. New Due Date: " + loanToRenew.getDueDate());
                             } else {
-                                out.println("Book could not be renewed. It may not be reserved.");
+                                out.println("Book could not be renewed. No active loan found for the given ISBN.");
                             }
                         } else {
                             out.println("Invalid renew command. Usage: renew;ISBN");
