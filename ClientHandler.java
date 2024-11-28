@@ -86,8 +86,8 @@ public class ClientHandler extends Thread {
                             String ISBN = parts[1];
                             Book bookToRenew = bookManager.searchBookByISBN(ISBN);
                             if (bookToRenew != null && bookToRenew.isReserved()) {
-                                // Logic to renew the reservation (e.g., extend the reservation period)
-                                out.println("Book renewed successfully.");
+                                bookToRenew.extendDueDate();
+                                out.println("Book renewed successfully. New Due Date: " + bookToRenew.getDueDate());
                             } else {
                                 out.println("Book could not be renewed. It may not be reserved.");
                             }
