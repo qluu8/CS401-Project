@@ -1,7 +1,7 @@
 /* Author: Christian Amoranto 11/28/24
  * LoanManager class to handle loan methods
  * Added search and renewal methods
- * Still needs check out and return loan methods
+ * UPDATED 11/28/24 Darrell heim added loan/return method
  */
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class LoanManager {
     }
 
     // Add a new loan
-    public Loan addLoan {
+    public Loan addLoan(Book  loan ) {
         // logic to create and add a loan for the specified book
 
         return null; 
@@ -42,7 +42,7 @@ public class LoanManager {
     }
 
     // Return a loan
-    public Loan returnLoan {
+    public Loan returnLoan(Book loan) {
         // logic to return a loan
   
         return null; // Placeholder return
