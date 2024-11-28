@@ -11,46 +11,47 @@ public class Loan {
     private LocalDate loanDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
-
-    public Loan(String bookTitle, String author, LocalDate loanDate, LocalDate dueDate, LocalDate returnDate) {
-        this.bookTitle = bookTitle;
-        this.author = author;
-        this.loanDate = loanDate;
-        this.dueDate = loanDate.plusWeeks(2);
-        this.returnDate = returnDate;
-    }
-
-    public String getBookTitle() {
-        return bookTitle;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public LocalDate getLoanDate() {
-        return loanDate;
-    }
-
-    public LocalDate getDueDate() {
-        return dueDate;
-    }
-
-    public LocalDate getReturnDate() {
-        return returnDate;
-    }
-
-    // Extends due date by 2 weeks
-    public void extendDueDate() {
-        this.dueDate = this.dueDate.plusWeeks(2);
-    }
-
-    public boolean isReserved() {
-        return isReserved;
-    }
-
-    public void setReserved(boolean reserved) {
-        this.isReserved = reserved;
+        private boolean isReserved;
+    
+        public Loan(String bookTitle, String author, LocalDate loanDate, LocalDate dueDate, LocalDate returnDate) {
+            this.bookTitle = bookTitle;
+            this.author = author;
+            this.loanDate = loanDate;
+            this.dueDate = loanDate.plusWeeks(2);
+            this.returnDate = returnDate;
+        }
+    
+        public String getBookTitle() {
+            return bookTitle;
+        }
+    
+        public String getAuthor() {
+            return author;
+        }
+    
+        public LocalDate getLoanDate() {
+            return loanDate;
+        }
+    
+        public LocalDate getDueDate() {
+            return dueDate;
+        }
+    
+        public LocalDate getReturnDate() {
+            return returnDate;
+        }
+    
+        // Extends due date by 2 weeks
+        public void extendDueDate() {
+            this.dueDate = this.dueDate.plusWeeks(2);
+        }
+    
+        public boolean isReserved() {
+            return isReserved;
+        }
+    
+        public void setReserved(boolean reserved) {
+            this.isReserved = reserved;
         if (reserved) {
             book.setReserved(true); // Update the book's reserved status
         } else {
@@ -64,5 +65,15 @@ public class Loan {
                ", Loan Date: " + loanDate + ", Due Date: " + dueDate + 
                (returnDate != null ? ", Return Date: " + returnDate : ", Not Returned");
         // This will print title, author, loan date, due date, and if there is a return date past it will show that it hasn't been returned.
+    }
+
+    private static class book {
+
+        private static void setReserved(boolean b) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        public book() {
+        }
     }
 }
