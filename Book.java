@@ -1,5 +1,8 @@
 /* Author: Christian Amoranto
  * initial draft of Book class based on requiremnts doc 11/24/2024
+ * 
+ * Edit by Quan Luu 11/27/2024
+ * Added functions to set title, author, genre, and ISBN
  */
     
 public class Book {
@@ -49,6 +52,26 @@ public class Book {
 
     public void setReserved(boolean reserved) {
         this.isReserved = reserved;
+    }
+    
+    public void setTitle(String Title)
+    {
+    	title = Title;
+    }
+    
+    public void setAuthor(String Author)
+    {
+    	author = Author;
+    }
+    
+    public void setGenre(String Genre)
+    {
+    	genre = Genre;
+    }
+    
+    public void setISBN(String isbn)
+    {
+    	ISBN = isbn;
     }
 
     public String toString() {
