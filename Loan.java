@@ -16,7 +16,7 @@ public class Loan {
         this.bookTitle = bookTitle;
         this.author = author;
         this.loanDate = loanDate;
-        this.dueDate = dueDate;
+        this.dueDate = loanDate.plusWeeks(2);
         this.returnDate = returnDate;
     }
 
@@ -38,6 +38,10 @@ public class Loan {
 
     public LocalDate getReturnDate() {
         return returnDate;
+    }
+
+    public void extendDueDate() {
+        this.dueDate = this.dueDate.plusWeeks(2);
     }
 
     @Override
