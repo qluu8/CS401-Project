@@ -6,12 +6,10 @@ and depending of how many days its late its provding total fee.
  */
 public class PayingFee {
    
-    public static void main(String[] args) {
-        // Sample data for fee calculation
-        int dueDate = 5; // Assuming day 5 of the month
-        int returnDate = 10; // Assuming day 10 of the month
-        double flatFee = 2.0; // Flat fee for late returns
-        double dailyFeeRate = 0.5; // Fee charged per day after due date
+    public static void main(String[] args) {  
+        int dueDate = 5; 
+        int returnDate = 10;
+        double dailyFeeRate = 0.5; 
 
         // Create an instance of FeeCalculation and set values
         FeeCalculation feeCalculation = new FeeCalculation();
