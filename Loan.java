@@ -1,85 +1,81 @@
-/* Author: moeikrey (A.S.)
- * Loan constructor. Basic implementation 11/24/24
- * Please go over and update as needed. I am waiting for other collaborations and I will redefine a loan once other 
- * modules are completed. Uses date off of time library
- */
 import java.time.LocalDate;
 
 public class Loan {
-    private String bookTitle;
-    private String author;
+    private Book book; // Use a Book instance instead of title and author strings
     private LocalDate loanDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
-        private boolean isReserved;
-    
-        public Loan(String bookTitle, String author, LocalDate loanDate) {
-            this.bookTitle = bookTitle;
-            this.author = author;
-            this.loanDate = loanDate;
-            this.dueDate = loanDate.plusWeeks(2);
-            this.returnDate = null;
-        }
-    
-        public String getBookTitle() {
-            return bookTitle;
-        }
-    
-        public String getAuthor() {
-            return author;
-        }
-    
-        public LocalDate getLoanDate() {
-            return loanDate;
-        }
-    
-        public LocalDate getDueDate() {
-            return dueDate;
-        }
-    
-        public LocalDate getReturnDate() {
-            return returnDate;
-        }
-    
-        // Extends due date by 2 weeks
-        public void extendDueDate() {
-            this.dueDate = this.dueDate.plusWeeks(2);
-        }
-    
-        public boolean isReserved() {
-            return isReserved;
-        }
-    
-        public void setReserved(boolean reserved) {
-            this.isReserved = reserved;
-        if (reserved) {
-            book.setReserved(true); // Update the book's reserved status
-        } else {
-            book.setReserved(false); // Clear the book's reserved status
-        }
-    }
-    //set return date only to be called when loan returned
-        public void setReturnDate() {
-            LocalDate currentDate = LocalDate.now();
-            this.returnDate=currentDate;
-        }
+    private boolean isReserved;
+
+    // Constructor with default loan date as LocalDate.now()
+    public Loan(Book book, LocalDate localDate) {
+        this("The Great Gatsby", "F. Scott Fitzgerald", LocalDate.now(), java.time.LocalDate.now().plusWeeks(2), book);
     }
 
+    // Constructor with custom loan date
+    public Loan(String the_Great_Gatsby, String f_Scott_Fitzgerald, LocalDate loanDate, LocalDate plusWeeks, Book book) {
+        this.book = book;
+        this.loanDate = loanDate;
+        this.dueDate = loanDate.plusWeeks(2); // Default due date is 2 weeks after loan date
+        this.returnDate = null;
+        this.isReserved = false;
+    }
+
+    Loan(Book book) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    // Getters
+    public Book getBook() {
+        return book;
+    }
+
+    public LocalDate getLoanDate() {
+        return loanDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
+
+    public boolean isReserved() {
+        return isReserved;
+    }
+
+    // Extends due date by 2 weeks
+    public void extendDueDate() {
+        this.dueDate = this.dueDate.plusWeeks(2);
+    }
+
+    // Sets the return date to the current date
+    public void setReturnDate() {
+        this.returnDate = LocalDate.now();
+    }
+
+    // Set reserved status
+    public void setReserved(boolean reserved) {
+        this.isReserved = reserved;
+        this.book.setReserved(reserved); // Update the book's reserved status
+    }
+
+    // Override toString for detailed loan information
     @Override
     public String toString() {
-        return "Title: " + bookTitle + ", Author: " + author + 
-               ", Loan Date: " + loanDate + ", Due Date: " + dueDate + 
-               (returnDate != null ? ", Return Date: " + returnDate : ", Not Returned");
-        // This will print title, author, loan date, due date, and if there is a return date past it will show that it hasn't been returned.
+        return "Title: " + book.getTitle() + ", Author: " + book.getAuthor() +
+               ", Loan Date: " + loanDate + ", Due Date: " + dueDate +
+               (returnDate != null ? ", Return Date: " + returnDate : ", Not Returned") +
+               ", Reserved: " + isReserved;
     }
 
-    private static class book {
+    AbstractStringBuilder getBorrowerName() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
-        private static void setReserved(boolean b) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public book() {
-        }
+    AbstractStringBuilder getBorrowerName() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
