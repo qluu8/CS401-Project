@@ -6,7 +6,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.date;
+import java.util.Localdate;
 
 public class LoanManager {
     private List<Loan> loans; // List to manage active loans
