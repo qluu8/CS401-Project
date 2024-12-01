@@ -19,15 +19,14 @@ public class LoanManager {
     public void addLoan(Book  book ) {
         // logic to create and add a loan for the specified book
         LocalDate currentDate = LocalDate.now();
-        if(book.getisAvailable()){
-            book.setAvailable(false);
-            Loan recent= new Loan(book.getTitle(), book.getauthor(), currentDate);
-            this.loans.add(recent);
+        if (book.isAvailable()) { // Check if the book is available
+            book.setAvailable(false); // Mark the book as unavailable
+            Loan newLoan = new Loan(book.getISBN(), currentDate); // Create a new loan using the book's ISBN
+            this.loans.add(newLoan); // Add the loan to the list
+            System.out.println("Loan created for book: " + book.getTitle());
+        } else {
+            System.out.println("Book is not available for loan: " + book.getTitle());
         }
-        else{ 
-            out.system.println("book not found");//book not found
-      }
-    
     }
 
     // Search for a loan by ISBN
@@ -40,16 +39,20 @@ public class LoanManager {
         return null; // Loan not found
     }
 
-    // Renew a loan
+   // Renew a loan
     public boolean renewLoan(String ISBN) {
         Loan loan = searchLoanByISBN(ISBN);
+
         if (loan != null) {
             loan.extendDueDate(); // Extend the due date by 2 weeks
+            System.out.println("Loan renewed for book with ISBN: " + ISBN);
             return true;
         }
-        return false; // Loan not found
-    }
 
+        System.out.println("No active loan found for ISBN: " + ISBN);
+        return false;
+    }
+    
     // Return a loan
     public void returnLoan(Book book) {
        for (Loan loan : loans) {
