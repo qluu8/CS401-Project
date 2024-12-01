@@ -1,5 +1,6 @@
-/* Author: tendou_. (C.H.)
+/* Author: tendou_. (Chandler Hui)
  * User Registration Basic implementation 11/24/24
+ * 12/1/24 Update (Chandler Hui) Updated staffAccess to search by ISBN
  */
 import java.io.*;
 import java.util.*;
@@ -102,19 +103,55 @@ public class registration {
     }
 
         // Message for staff users, also so I can get feedback this thing actually works
-    private static void staffAccess() {
-        LoanHistory loanHistory = new LoanHistory();
-        System.out.println("Welcome, Staff Member!");
+        private static void staffAccess() {
+            Scanner scanner = new Scanner(System.in);
+            LoanHistory loanHistory = new LoanHistory();
+            
+            // Load books from the catalog
+            List<Book> bookCatalog = loadBooks();
+        
+            System.out.println("Welcome, Staff Member!");
+            System.out.print("Enter ISBN of the book to loan: ");
+            String isbn = scanner.nextLine(); // Take input for ISBN
+        
+            // Find the book by ISBN using the method you provided
+            Book selectedBook = findBookByISBN(bookCatalog, isbn);
+        
+            if (selectedBook != null && selectedBook.isAvailable()) {
+                // Create the loan using the ISBN (not the Book object directly)
+                Loan loan = new Loan(isbn, java.time.LocalDate.now());
+                loanHistory.addLoan(loan);
+        
+                // Mark the book as unavailable
+                selectedBook.setAvailable(false);
+        
+                System.out.println("Loan created successfully!");
+                loanHistory.viewLoanHistory();
+            } else {
+                System.out.println("Book not found or is currently unavailable.");
+            }
+        }
+        
+        
 
-        // Example functionality for staff members, currently book info is static, needs to be interchangable later
-        Loan loan1 = new Loan("The Great Gatsby", "F. Scott Fitzgerald", 
-                              java.time.LocalDate.now(), 
-                              java.time.LocalDate.now().plusWeeks(2), null);
-        loanHistory.addLoan(loan1);
-        loanHistory.viewLoanHistory();
-
-        //ADD BRANCH TO FRONT END FOR STAFF A.S.
+private static Book findBookByISBN(List<Book> bookCatalog, String isbn) {
+    for (Book book : bookCatalog) {
+        if (book.getISBN().equals(isbn)) {
+            return book;
+        }
     }
+    return null;
+}
+
+private static List<Book> loadBooks() {
+    // Placeholder: Load books from a file or create sample books for testing
+    List<Book> books = new ArrayList<>();
+    books.add(new Book("1984", "George Orwell", "Dystopian", "1234567890"));
+    books.add(new Book("To Kill a Mockingbird", "Harper Lee", "Fiction", "0987654321"));
+    return books;
+}
+
+        
 
         // Message for public users
     private static void publicAccess() {
