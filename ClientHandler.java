@@ -49,7 +49,8 @@ public class ClientHandler extends Thread {
                             String author = parts[2];
                             String genre = parts[3];
                             String ISBN = parts[4];
-                            bookManager.addBook(title, author, genre, ISBN);
+                            Book newBook = new Book(title, author, genre, ISBN);
+                            bookManager.addBook(newBook);
                             out.println("Book added successfully.");
                         } else {
                             out.println("Invalid addbook command. Usage: addbook;title;author;genre;ISBN");
