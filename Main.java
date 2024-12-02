@@ -3,7 +3,7 @@
  * I have created this main.java to connect all the Classes together.
  */
 
-
+   
 import java.time.LocalDate;
 
 public class Main {
@@ -12,7 +12,7 @@ public class Main {
         Book book = new Book("Harry Potter", "J.K. Rowling", "Fantasy", "Available");
 
         // Step 2: Create a Loan for the Book
-        Loan loan = new Loan(book);
+        Loan loan = new Loan(book.getISBN(),LocalDate.now());
         System.out.println("Loan created:\n" + loan);
 
         // Step 3: Extend the due date by 2 weeks
@@ -33,7 +33,7 @@ public class Main {
         // Step 6: Create another loan with a custom loan date
         System.out.println("\nCreating another loan with a custom loan date...");
         LocalDate customLoanDate = LocalDate.of(2024, 10, 15); // Custom loan date
-        Loan customLoan = new Loan("The Great Gatsby", "F. Scott Fitzgerald", customLoanDate, java.time.LocalDate.now().plusWeeks(2), book);
+        Loan customLoan = new Loan("The Great Gatsby", customLoanDate);
         System.out.println("Custom Loan:\n" + customLoan);
 
         // Step 7: Check overdue logic
@@ -50,3 +50,4 @@ public class Main {
         }
     }
 }
+

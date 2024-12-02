@@ -89,12 +89,4 @@ public class BookManager
     	return 0; // Returns 0 if the book does not exist.
     		
     }
-    void addBook(Book newBook) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void addBook(Book newBook) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addBook'");
-    }
 }

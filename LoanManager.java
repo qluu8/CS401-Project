@@ -1,4 +1,5 @@
-/* Author: Christian Amoranto 11/28/24
+package src;
+	/* Author: Christian Amoranto 11/28/24
  * LoanManager class to handle loan methods
  * Added search and renewal methods
  * UPDATED 11/28/24 Darrell heim added loan/return method
@@ -58,10 +59,9 @@ public class LoanManager {
     // Return a loan
     public void returnLoan(Book book) {
        for (Loan loan : loans) {
-            if (loan.getBook().getTitle().equals(book.getTitle())) {
+            if (loan.getISBN().equals(book.getISBN())) {
                 book.setAvailable(true); 
                 FeeCalculation due = new  FeeCalculation();
-                due.setDueDate();
                 double pay=0;
                 pay+=due.calculateFees(loan.getDueDate(),loan.getReturnDate());
                 loans.remove(loan); 
