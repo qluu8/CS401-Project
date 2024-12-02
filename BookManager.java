@@ -5,6 +5,9 @@
  * 
  * Edit: Quan Luu 11/27/2024
  * Added new variable bookCount to keep track of number of books. Made changes to addBook and removeBook. Added helper functions getBookCount, and bookExist.
+ * 
+ * Edit: Quan Luu 12/1/2024
+ * Updated addBook and removeBook. Deleted helper function bookExist.
  */
 import java.util.ArrayList;
 import java.util.List;
@@ -22,29 +25,22 @@ public class BookManager
 
     public void addBook(String title, String author, String genre, String ISBN) 
     {
-    	int exsists = bookExist(ISBN);
+    	Book add = searchBookByISBN(ISBN);
     	
-    	if(exsists == 0) // If the book does not exist (using ISBN to check) then add new Book.
-    	{
-    		Book newBook = new Book(title, author, genre, ISBN);
-    		books.add(newBook);
-    		bookCount++;
-    	}
-    	else // If the book exist (using ISBN to check) make changes to the already existing book.
-    	{
-    		books.get(exsists).setTitle(title);
-    		books.get(exsists).setAuthor(author);
-    		books.get(exsists).setGenre(genre);
-    		books.get(exsists).setISBN(ISBN);
-    	}
+    	if(add != null) // If the book does not exist (using ISBN to check) then add new Book.
+    		throw new IllegalArgumentException("Book with the given ISBN already exists.");
+    	
+		Book newBook = new Book(title, author, genre, ISBN);
+		books.add(newBook);
+		bookCount++;
     }
 
     public void removeBook(String ISBN)
     {
-    	int exsists = bookExist(ISBN); // Checks to see if the book exist before removal.
-    	if(exsists != 0) // If the book does exist remove it.
+    	Book remove = searchBookByISBN(ISBN); // Checks to see if the book exist before removal.
+    	if(remove != null) // If the book does exist remove it.
     	{
-    		books.removeIf(book -> book.getISBN().equals(ISBN));
+    		books.remove(remove);
     		bookCount--;
     	}
     }
@@ -80,13 +76,4 @@ public class BookManager
     	return bookCount;
     }
     
-    public int bookExist(String ISBN) // Checks to see if the book exist in the list. Returns the position of the found ISBN.
-    {
-    	for(int i = 0; i < bookCount; i++)
-    		if(books.get(i).getISBN().equalsIgnoreCase(ISBN))
-    			return i;
-    	
-    	return 0; // Returns 0 if the book does not exist.
-    		
-    }
 }
