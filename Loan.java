@@ -1,3 +1,7 @@
+/*
+ * Author: moeikrey (A.S.) 12/1/24
+ * Loan constructor
+ */
 import java.time.LocalDate;
 
 public class Loan {

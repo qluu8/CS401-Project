@@ -1,9 +1,10 @@
-package src;
+
 	/* Author: Christian Amoranto 11/28/24
  * LoanManager class to handle loan methods
  * Added search and renewal methods
  * UPDATED 11/28/24 Darrell heim added loan/return method
  * UPDATED 12/1/24 (Chandler Hui) Fixed bracket errors and formatting
+ * Update: removed package moeikrey (A.S.)
  */
 
 import java.util.ArrayList;
