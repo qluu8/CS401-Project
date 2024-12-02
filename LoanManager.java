@@ -25,7 +25,7 @@ public class LoanManager {
         LocalDate currentDate = LocalDate.now();
         if (book.isAvailable()) { // Check if the book is available
             book.setAvailable(false); // Mark the book as unavailable
-            Loan newLoan = new Loan(book.getISBN(), currentDate); // Create a new loan using the book's ISBN
+            Loan newLoan = new Loan(book.getTitle(),book.getISBN(), currentDate); // Create a new loan using the book's ISBN
             this.loans.add(newLoan); // Add the loan to the list
             System.out.println("Loan created for book: " + book.getTitle());
         } else {
