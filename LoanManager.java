@@ -2,11 +2,13 @@
  * LoanManager class to handle loan methods
  * Added search and renewal methods
  * UPDATED 11/28/24 Darrell heim added loan/return method
+ * UPDATED 12/1/24 (Chandler Hui) Fixed bracket errors and formatting
  */
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Localdate;
+import java.time.LocalDate;
+import java.util.*;
 
 public class LoanManager {
     private List<Loan> loans; // List to manage active loans
@@ -56,9 +58,9 @@ public class LoanManager {
     // Return a loan
     public void returnLoan(Book book) {
        for (Loan loan : loans) {
-            if (loan.getTitle().equals(book.getTitle())) {
+            if (loan.getBook().getTitle().equals(book.getTitle())) {
                 book.setAvailable(true); 
-                FeeCalculation due= new  FeeCalculation;
+                FeeCalculation due = new  FeeCalculation();
                 due.setDueDate();
                 double pay=0;
                 pay+=due.calculateFees(loan.getDueDate(),loan.getReturnDate());
@@ -66,5 +68,7 @@ public class LoanManager {
                 System.out.println(book.getTitle() + " returned.\n");
                 System.out.println("must pay "+ pay +" immediately\n");
                 return;
+            }
     }
+}
 }

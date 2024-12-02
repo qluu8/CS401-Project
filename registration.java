@@ -1,6 +1,7 @@
 /* Author: tendou_. (Chandler Hui)
  * User Registration Basic implementation 11/24/24
  * 12/1/24 Update (Chandler Hui) Updated staffAccess to search by ISBN
+ * Also updated publicAccess to view and request loans
  */
 import java.io.*;
 import java.util.*;
@@ -114,7 +115,7 @@ public class registration {
             System.out.print("Enter ISBN of the book to loan: ");
             String isbn = scanner.nextLine(); // Take input for ISBN
         
-            // Find the book by ISBN using the method you provided
+            // Find the book by ISBN
             Book selectedBook = findBookByISBN(bookCatalog, isbn);
         
             if (selectedBook != null && selectedBook.isAvailable()) {
@@ -125,11 +126,12 @@ public class registration {
                 // Mark the book as unavailable
                 selectedBook.setAvailable(false);
         
-                System.out.println("Loan created successfully!");
+                System.out.println("Loan created successfully for: " + selectedBook.getTitle() + " by " + selectedBook.getAuthor());
                 loanHistory.viewLoanHistory();
             } else {
                 System.out.println("Book not found or is currently unavailable.");
             }
+            scanner.close();
         }
         
         
@@ -154,11 +156,63 @@ private static List<Book> loadBooks() {
         
 
         // Message for public users
-    private static void publicAccess() {
-        System.out.println("Welcome, Public User!");
-        System.out.println("You can view books or request loans.");
-
-        //ADD BRANCH TO FRONT END FOR PUBLIC USER A.S.
-        //CREATE CLASSES FOR THEM BOTH POSSIBLY
-    }
+        private static void publicAccess() {
+            Scanner scanner = new Scanner(System.in);
+            List<Book> bookCatalog = loadBooks(); // Load books into the catalog
+        
+            System.out.println("Welcome, Public User!");
+            boolean exit = false;
+        
+            while (!exit) {
+                System.out.println("\nChoose an option:");
+                System.out.println("1. View available books");
+                System.out.println("2. Request a loan");
+                System.out.println("3. Exit");
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+        
+                switch (choice) {
+                    case 1:
+                        viewAvailableBooks(bookCatalog);
+                        break;
+                    case 2:
+                        requestLoan(scanner, bookCatalog);
+                        break;
+                    case 3:
+                        exit = true;
+                        break;
+                    default:
+                        System.out.println("Invalid choice! Please try again.");
+                }
+            }
+            scanner.close();
+        }
+        
+        private static void viewAvailableBooks(List<Book> bookCatalog) {
+            System.out.println("Available Books:");
+            for (Book book : bookCatalog) {
+                if (book.isAvailable()) {
+                    System.out.println(book);  // Printing book details using toString() method
+                }
+            }
+        }
+        
+        private static void requestLoan(Scanner scanner, List<Book> bookCatalog) {
+            System.out.print("Enter the ISBN of the book you want to loan: ");
+            String isbn = scanner.nextLine();
+            Book book = findBookByISBN(bookCatalog, isbn);
+        
+            if (book != null && book.isAvailable()) {
+                // Create the loan using the book's ISBN
+                LoanManager loanManager = new LoanManager();
+                new Loan(book.getISBN(), java.time.LocalDate.now());
+                loanManager.addLoan(book); // Create a loan for the book
+                
+                System.out.println("Loan requested successfully for: " + book.getTitle());
+            } else {
+                System.out.println("Book not found or is currently unavailable.");
+            }
+        }
+        
 }
