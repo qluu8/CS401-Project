@@ -10,17 +10,22 @@ public class Loan {
     private LocalDate dueDate;
     private LocalDate returnDate;
     private boolean isReserved;
+    private String title;
 
-    public Loan(String ISBN, LocalDate loanDate) {
+    public Loan(String title,String ISBN, LocalDate loanDate) {
         this.ISBN = ISBN;
         this.loanDate = loanDate;
         this.dueDate = loanDate.plusWeeks(2); // Default due date is 2 weeks after loan date
         this.returnDate = null; 
-        this.isReserved = false; 
+        this.isReserved = false;
+         this.title = title;
     }
 
     public String getISBN() {
         return ISBN;
+    }
+     public String getTitle() {
+        return title;
     }
 
     public LocalDate getLoanDate() {
