@@ -151,7 +151,7 @@ public class LibraryGUI extends JFrame {
 
             Book book = findBookByTitle(bookTitle);
             if (book != null) {
-                Loan loan = new Loan(book.getISBN(), LocalDate.now());
+                Loan loan = new Loan(book.getTitle(),book.getISBN(), LocalDate.now());
                 loans.add(loan);
                 JOptionPane.showMessageDialog(createLoanFrame, "Loan created successfully!");
                 createLoanFrame.dispose();
@@ -208,7 +208,7 @@ public class LibraryGUI extends JFrame {
 for (Loan loan : loans) {
     if (LocalDate.now().isAfter(loan.getDueDate())) {
         long daysLate = ChronoUnit.DAYS.between(loan.getDueDate(), LocalDate.now());
-        sb.append("Book: ").append(loan.getBook().getTitle())
+        sb.append("Book: ").append(loan.getTitle())
           .append(", Borrower: ").append(loan.getBorrowerName())
           .append(", Days Late: ").append(daysLate)
           .append("\n");
@@ -243,7 +243,7 @@ textArea.setText(sb.toString());
 
     private Loan findLoanByBookTitle(String title) {
         for (Loan loan : loans) {
-            if (loan.getBook().getTitle().equalsIgnoreCase(title)) {
+            if (loan.getTitle().equalsIgnoreCase(title)) {
                 return loan;
             }
         }
