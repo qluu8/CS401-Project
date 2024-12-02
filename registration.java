@@ -1,7 +1,8 @@
-/* Author: tendou_. (Chandler Hui)
+/* Author: Tendou-0 (Chandler Hui)
  * User Registration Basic implementation 11/24/24
  * 12/1/24 Update (Chandler Hui) Updated staffAccess to search by ISBN
  * Also updated publicAccess to view and request loans
+ * 12/1/24 Update (Chandler Hui) Added function to add/remove booksfor staffAccess
  */
 import java.io.*;
 import java.util.*;
@@ -107,23 +108,41 @@ public class registration {
         private static void staffAccess() {
             Scanner scanner = new Scanner(System.in);
             LoanHistory loanHistory = new LoanHistory();
-            
-            // Load books from the catalog
-            List<Book> bookCatalog = loadBooks();
+            List<Book> bookCatalog = loadBooks(); // Load books from catalog
         
-            System.out.println("Welcome, Staff Member!");
+            boolean exit = false;
+            while (!exit) {
+                System.out.println("\nWelcome, Staff Member!");
+                System.out.println("1. Loan a book");
+                System.out.println("2. Add a book");
+                System.out.println("3. Remove a book");
+                System.out.println("4. View all books");
+                System.out.println("5. Exit");
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+        
+                switch (choice) {
+                    case 1 -> loanBook(scanner, loanHistory, bookCatalog);
+                    case 2 -> addBook(scanner, bookCatalog);
+                    case 3 -> removeBook(scanner, bookCatalog);
+                    case 4 -> viewBooks(bookCatalog);
+                    case 5 -> exit = true;
+                    default -> System.out.println("Invalid choice! Please try again.");
+                }
+            }
+            scanner.close();
+        }
+        
+        private static void loanBook(Scanner scanner, LoanHistory loanHistory, List<Book> bookCatalog) {
             System.out.print("Enter ISBN of the book to loan: ");
-            String isbn = scanner.nextLine(); // Take input for ISBN
+            String isbn = scanner.nextLine();
         
-            // Find the book by ISBN
             Book selectedBook = findBookByISBN(bookCatalog, isbn);
         
             if (selectedBook != null && selectedBook.isAvailable()) {
-                // Create the loan using the ISBN (not the Book object directly)
                 Loan loan = new Loan(isbn, java.time.LocalDate.now());
                 loanHistory.addLoan(loan);
-        
-                // Mark the book as unavailable
                 selectedBook.setAvailable(false);
         
                 System.out.println("Loan created successfully for: " + selectedBook.getTitle() + " by " + selectedBook.getAuthor());
@@ -131,7 +150,41 @@ public class registration {
             } else {
                 System.out.println("Book not found or is currently unavailable.");
             }
-            scanner.close();
+        }
+        
+        private static void addBook(Scanner scanner, List<Book> bookCatalog) {
+            System.out.print("Enter book title: ");
+            String title = scanner.nextLine();
+            System.out.print("Enter book author: ");
+            String author = scanner.nextLine();
+            System.out.print("Enter book genre: ");
+            String genre = scanner.nextLine();
+            System.out.print("Enter book ISBN: ");
+            String isbn = scanner.nextLine();
+        
+            Book newBook = new Book(title, author, genre, isbn);
+            bookCatalog.add(newBook);
+            System.out.println("Book added successfully: " + newBook.getTitle() + " by " + newBook.getAuthor());
+        }
+        
+        private static void removeBook(Scanner scanner, List<Book> bookCatalog) {
+            System.out.print("Enter ISBN of the book to remove: ");
+            String isbn = scanner.nextLine();
+        
+            Book bookToRemove = findBookByISBN(bookCatalog, isbn);
+            if (bookToRemove != null) {
+                bookCatalog.remove(bookToRemove);
+                System.out.println("Book removed successfully: " + bookToRemove.getTitle() + " by " + bookToRemove.getAuthor());
+            } else {
+                System.out.println("Book not found.");
+            }
+        }
+        
+        private static void viewBooks(List<Book> bookCatalog) {
+            System.out.println("\nBooks in Catalog:");
+            for (Book book : bookCatalog) {
+                System.out.println(book); // Assuming Book's toString method prints details
+            }
         }
         
         
