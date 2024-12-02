@@ -4,12 +4,14 @@ and showes the output of when the book was due and when it was return,
 and depending of how many days its late its provding total fee. 
  * 
  */
+import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
 public class PayingFee {
    
     public static void main(String[] args) {
-      
-        int dueDate = 5; 
-        int returnDate = 10; 
+    
+        LocalDate dueDate=LocalDate.of(2025,11,24);   //in format (year,month,day)
+        LocalDate returnDate = LocalDate.of(2025,11,25);   //in format (year,month,day)
         double flatFee = 2.0; 
         double dailyFeeRate = 0.5; 
 
@@ -30,26 +32,26 @@ public class PayingFee {
 
 // FeeCalculation class
 class FeeCalculation {
-    private int dueDate;
-    private int returnDate;
+    private LocalDate dueDate;
+    private LocalDate returnDate;
     private double flatFee;
     private double dailyFeeRate;
     private double totalFees;
 
     // Getters and Setters
-    public int getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(int dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 
-    public int getReturnDate() {
+    public LocalDate getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(int returnDate) {
+    public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
     }
 
@@ -78,15 +80,14 @@ class FeeCalculation {
     }
 
     // Method to calculate fees
-    public double calculateFees(int dueDate, int returnDate) {
-        if (returnDate <= dueDate) {
+    public double calculateFees(LocalDate dueDate, LocalDate returnDate) {
+        if (dueDate.isAfter(returnDate)) {
             totalFees = 0; // No fee if returned on or before due date
         } else {
-            int lateDays = returnDate - dueDate;
+            long lateDays =ChronoUnit.DAYS.between(dueDate, returnDate);
             totalFees = flatFee + (lateDays * dailyFeeRate);
         }
         return totalFees;
     }
 }
  
-
