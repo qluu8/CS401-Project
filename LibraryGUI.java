@@ -151,7 +151,7 @@ public class LibraryGUI extends JFrame {
 
             Book book = findBookByTitle(bookTitle);
             if (book != null) {
-                Loan loan = new Loan(book, LocalDate.now());
+                Loan loan = new Loan(book.getISBN(), LocalDate.now());
                 loans.add(loan);
                 JOptionPane.showMessageDialog(createLoanFrame, "Loan created successfully!");
                 createLoanFrame.dispose();
