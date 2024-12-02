@@ -13,67 +13,64 @@ public class Book {
     private boolean isAvailable;
     private boolean isReserved;
 
-    public Book(String title, String author, String genre, String ISBN) {
+    public Book(String title, String author, String genre, String ISBN, boolean isAvailable, boolean isReserved) {
         this.title = title;
         this.author = author;
         this.genre = genre;
         this.ISBN = ISBN;
-        this.isAvailable = true; 
-        this.isReserved = false; 
+        this.isAvailable = isAvailable;
+        this.isReserved = isReserved;
     }
-   
+
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAuthor() {
         return author;
     }
 
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public String getGenre() {
         return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public String getISBN() {
         return ISBN;
     }
 
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
+    }
+
     public boolean isAvailable() {
         return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
 
     public boolean isReserved() {
         return isReserved;
     }
 
-    public void setAvailable(boolean available) {
-        this.isAvailable = available;
-    }
-
     public void setReserved(boolean reserved) {
-        this.isReserved = reserved;
-    }
-    
-    public void setTitle(String Title)
-    {
-    	title = Title;
-    }
-    
-    public void setAuthor(String Author)
-    {
-    	author = Author;
-    }
-    
-    public void setGenre(String Genre)
-    {
-    	genre = Genre;
-    }
-    
-    public void setISBN(String isbn)
-    {
-    	ISBN = isbn;
+        isReserved = reserved;
     }
 
+    @Override
     public String toString() {
         return "Book Details:\n" +
                 "Title: " + title + "\n" +
@@ -84,3 +81,4 @@ public class Book {
                 "Reserved: " + (isReserved ? "Yes" : "No");
     }
 }
+
