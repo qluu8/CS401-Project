@@ -110,7 +110,8 @@ public class LibraryGUI extends JFrame {
                 sb.append("Title: ").append(book.getTitle())
                   .append(", Author: ").append(book.getAuthor())
                   .append(", Genre: ").append(book.getGenre())
-                  .append(", Status: ").append(book.getStatus())
+                  .append(", is available: ").append(book.getIsAvailable())
+                    .append(", is reserved: ").append(book.getIsReserved())
                   .append("\n");
             }
             textArea.setText(sb.toString());
@@ -209,7 +210,7 @@ for (Loan loan : loans) {
     if (LocalDate.now().isAfter(loan.getDueDate())) {
         long daysLate = ChronoUnit.DAYS.between(loan.getDueDate(), LocalDate.now());
         sb.append("Book: ").append(loan.getTitle())
-          .append(", Borrower: ").append(loan.getBorrowerName())
+         /* .append(", Borrower: ").append(loan.getBorrowerName()) */
           .append(", Days Late: ").append(daysLate)
           .append("\n");
     }
