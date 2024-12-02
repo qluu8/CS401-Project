@@ -8,7 +8,7 @@ class Book_Test
 	@Test
 	void TestTitle() 
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		
 		assertEquals("Test Title", test.getTitle());
 	}
@@ -16,7 +16,7 @@ class Book_Test
 	@Test
 	void TestAuthor()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		
 		assertEquals("Test Author", test.getAuthor());
 	}
@@ -24,7 +24,7 @@ class Book_Test
 	@Test
 	void TestGenre()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		
 		assertEquals("Test Genre", test.getGenre());
 	}
@@ -32,7 +32,7 @@ class Book_Test
 	@Test
 	void TestISBN()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		
 		assertEquals("Test ISBN", test.getISBN());
 	}
@@ -40,7 +40,7 @@ class Book_Test
 	@Test
 	void TestSetTitle()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		test.setTitle("The Hobbit");
 		assertEquals("The Hobbit", test.getTitle());
 	}
@@ -48,7 +48,7 @@ class Book_Test
 	@Test
 	void TestSetAuthor()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		test.setAuthor("Author");
 		assertEquals("Author", test.getAuthor());
 	}
@@ -56,7 +56,7 @@ class Book_Test
 	@Test
 	void TestSetGenre()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		test.setGenre("Fantasy");
 		assertEquals("Fantasy", test.getGenre());
 	}
@@ -64,7 +64,7 @@ class Book_Test
 	@Test
 	void TestSetISBN()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		test.setISBN("123456789");
 		assertEquals("123456789", test.getISBN());
 	}
@@ -72,21 +72,21 @@ class Book_Test
 	@Test
 	void isAvailable()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		assertTrue(test.isAvailable());
 	}
 	
 	@Test
 	void isReserved()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		assertFalse(test.isReserved());
 	}
 	
 	@Test
 	void TestSetAvailable()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		test.setAvailable(false);
 		assertFalse(test.isAvailable());
 		
@@ -97,7 +97,7 @@ class Book_Test
 	@Test
 	void TestSetReserved()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		test.setReserved(true);
 		assertTrue(test.isReserved());
 		
@@ -108,7 +108,7 @@ class Book_Test
 	@Test
 	void TesttoString()
 	{
-		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN");
+		Book test = new Book("Test Title", "Test Author", "Test Genre", "Test ISBN", true, false);
 		String expected = "Book Details:\n" +
                 "Title: " + test.getTitle() + "\n" +
                 "Author: " + test.getAuthor() + "\n" +
