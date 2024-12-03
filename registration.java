@@ -54,6 +54,19 @@ public class registration {
                 + "Please enter your login info:\n"
                 + "Example: login;" + username + ";" + password;
     }
+    
+  //Overloaded method for GUI-based registration
+    public boolean registerUser(String username, String password, String role) throws IOException {
+        if (isUserExists(username)) {
+            return false; // User already exists
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
+            writer.write(username + "," + password + "," + role);
+            writer.newLine();
+        }
+        return true;
+    }
 
     // Validate user credentials
     public String validateUser(String username, String password) {
@@ -96,3 +109,4 @@ public class registration {
         return false;
     }
 }
+
