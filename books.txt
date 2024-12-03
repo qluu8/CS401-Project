@@ -1,0 +1,6 @@
+The Catcher in the Rye;J.D. Salinger;Fiction;12345;true;false
+The Hobbit;J.R.R. Tolkien;Fantasy;23456;true;false
+Pride and Prejudice;Jane Austen;Romance;34567;true;false
+1984;George Orwell;Dystopian;45678;true;false
+Dracula;Bram Stoker;Horror;56789;true;false
+The Lightning Thief;Rick Riordan;Fantasy;12903;true;false
