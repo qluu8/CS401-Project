@@ -3,6 +3,7 @@
  */
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LoanHistory {
     private List<Loan> loans;
@@ -24,5 +25,23 @@ public class LoanHistory {
         for (Loan loan : loans) {
             System.out.println(loan);
         }
+    }
+
+    // Get all loans
+    public List<Loan> getLoans() {
+        return new ArrayList<>(loans); // Return a copy to avoid external modifications
+    }
+
+    // Get loans by ISBN
+    public List<Loan> getLoansByISBN(String ISBN) {
+        return loans.stream()
+                    .filter(loan -> loan.getISBN().equalsIgnoreCase(ISBN))
+                    .collect(Collectors.toList());
+    }
+    
+    public List<Loan> getLoansByUser(String username) {
+        return loans.stream()
+                    .filter(loan -> loan.getUsername().equals(username))
+                    .collect(Collectors.toList());
     }
 }
