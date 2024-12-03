@@ -27,29 +27,21 @@ public class ClientHandler extends Thread {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
 
-            out.println("Welcome to the Library Server!");
-            out.println("New users: type 'register' to begin the account-making process.");
-            out.println("Returning users: type 'login;username;password'");
-            out.println("Example: login;publicuser;apple123");
-            String clientRequest;
+            out.println("Welcome to the Library System!");
+            out.println("Choose your interface:");
+            out.println("1. Console");
+            out.println("2. GUI");
+            out.println("Enter your choice:");
 
-            // Continuously listen for client requests
-            while ((clientRequest = in.readLine()) != null) {
-                System.out.println("Received: " + clientRequest);
+            String choice = in.readLine();
 
-                // Split the input into command parts
-                String[] parts = clientRequest.split(";");
-                String command = parts[0].toLowerCase();
-
-                // Handle the command
-                String response = handleCommand(command, parts, out, in);
-                out.println(response);
-
-                // If the client sends "exit", close the connection
-                if ("exit".equals(command)) {
-                    System.out.println("Client disconnected: " + clientSocket.getInetAddress());
-                    break;
-                }
+            if ("1".equals(choice)) {
+                out.println("You have chosen the Console interface.");
+                handleConsoleInterface(out, in);
+            } else if ("2".equals(choice)) {
+                out.println("You have chosen the GUI interface.");
+            } else {
+                out.println("Invalid choice. Disconnecting.");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,51 +54,60 @@ public class ClientHandler extends Thread {
         }
     }
 
-    // Command Handler
-    private String handleCommand(String command, String[] parts, PrintWriter out, BufferedReader in) {
-        try {
+    private void handleConsoleInterface(PrintWriter out, BufferedReader in) throws IOException {
+        out.println("New users: type 'register' to begin the account-making process.");
+        out.println("Returning users: type 'login' to log in.");
+        out.println("Type 'exit' to disconnect.");
+        String clientRequest;
+
+        while ((clientRequest = in.readLine()) != null) {
+            System.out.println("Received: " + clientRequest);
+
+            String command = clientRequest.trim().toLowerCase();
+            String response;
+
             switch (command) {
                 case "login":
-                    return handleLogin(parts, out, in); // Pass all required arguments
-
+                    response = handleLogin(out, in);
+                    break;
                 case "register":
-                    return registration.registerUser(out, in); // Handle user registration
-
+                    response = registration.registerUser(out, in);
+                    break;
                 case "exit":
-                    return "Goodbye!";
-
+                    out.println("Goodbye!");
+                    System.out.println("Client disconnected: " + clientSocket.getInetAddress());
+                    return;
                 default:
-                    return "Unknown command. Available commands: login, register, and exit.";
+                    response = "Unknown command. Available commands: login, register, and exit.";
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error processing command: " + e.getMessage();
+
+            out.println(response);
         }
     }
 
+    private String handleLogin(PrintWriter out, BufferedReader in) throws IOException {
+        out.println("Enter your username:");
+        String username = in.readLine().trim();
 
+        out.println("Enter your password:");
+        String password = in.readLine().trim();
 
-    private String handleLogin(String[] parts, PrintWriter out, BufferedReader in) throws IOException {
-        if (parts.length == 3) { // Format: login;username;password
-            String username = parts[1];
-            String password = parts[2];
-            String role = registration.validateUser(username, password);
+        String role = registration.validateUser(username, password);
 
-            if (role != null) {
-                out.println("Login successful! Role: " + role);
+        if (role != null) {
+            out.println("Login successful! Role: " + role);
 
-                if ("STAFF".equalsIgnoreCase(role)) {
-                    registration.staffAccess(bookManager, loanManager, username, out, in); // Pass username
-                } else if ("PUBLIC".equalsIgnoreCase(role)) {
-                    registration.publicAccess(bookManager, loanManager, username, out, in); // Pass username
-                }
-
-                return username + " logged out. Enter login details or type 'exit'.";
-            } else {
-                return "Invalid username or password.";
+            if ("STAFF".equalsIgnoreCase(role)) {
+                StaffAccess staffAccess = new StaffAccess();
+                staffAccess.handleStaffMenu(bookManager, loanManager, username, out, in);
+            } else if ("PUBLIC".equalsIgnoreCase(role)) {
+                PublicAccess publicAccess = new PublicAccess();
+                publicAccess.handlePublicMenu(bookManager, loanManager, username, out, in);
             }
+
+            return username + " logged out. Enter login details or type 'exit'.";
         } else {
-            return "Invalid login command. Usage: login;username;password";
+            return "Invalid username or password. Please try again.";
         }
     }
 }
