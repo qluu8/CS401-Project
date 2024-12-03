@@ -1,32 +1,35 @@
-package src;
-	/* Author: Christian Amoranto 11/28/24
+
+/* Author: Christian Amoranto 11/28/24
  * LoanManager class to handle loan methods
  * Added search and renewal methods
  * UPDATED 11/28/24 Darrell heim added loan/return method
  * UPDATED 12/1/24 (Chandler Hui) Fixed bracket errors and formatting
+ * Update: removed package moeikrey (A.S.)
  */
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.time.LocalDate;
-import java.util.*;
 
 public class LoanManager {
-    private List<Loan> loans; // List to manage active loans
+    private List<Loan> activeLoans; // List to manage active loans
+    private LoanHistory loanHistory; // History of all loans
 
     public LoanManager() {
-        this.loans = new ArrayList<>();
+        this.activeLoans = new ArrayList<>();
+        this.loanHistory = new LoanHistory();
     }
 
-    // Add a new loan
-    public void addLoan(Book  book ) {
-        // logic to create and add a loan for the specified book
+    // Add a new loan associated with a user
+    public void addLoan(Book book, String username) {
         LocalDate currentDate = LocalDate.now();
-        if (book.isAvailable()) { // Check if the book is available
-            book.setAvailable(false); // Mark the book as unavailable
-            Loan newLoan = new Loan(book.getISBN(), currentDate); // Create a new loan using the book's ISBN
-            this.loans.add(newLoan); // Add the loan to the list
-            System.out.println("Loan created for book: " + book.getTitle());
+        if (book.isAvailable()) {
+            book.setAvailable(false);
+            Loan newLoan = new Loan(book.getISBN(), currentDate, username);
+            activeLoans.add(newLoan);
+            loanHistory.addLoan(newLoan); // Add to history
+            System.out.println("Loan created for book: " + book.getTitle() + " by user: " + username);
         } else {
             System.out.println("Book is not available for loan: " + book.getTitle());
         }
@@ -34,41 +37,75 @@ public class LoanManager {
 
     // Search for a loan by ISBN
     public Loan searchLoanByISBN(String ISBN) {
-        for (Loan loan : loans) {
+        for (Loan loan : activeLoans) {
             if (loan.getISBN().equals(ISBN)) {
-                return loan; // Return the loan if found
+                return loan;
             }
         }
-        return null; // Loan not found
+        return null;
     }
 
-   // Renew a loan
-    public boolean renewLoan(String ISBN) {
-        Loan loan = searchLoanByISBN(ISBN);
+    // Retrieve loans for a specific user
+    public List<Loan> getLoansByUser(String username) {
+        return loanHistory.getLoansByUser(username);
+    }
 
-        if (loan != null) {
-            loan.extendDueDate(); // Extend the due date by 2 weeks
-            System.out.println("Loan renewed for book with ISBN: " + ISBN);
-            return true;
+
+
+    // Renew a loan for a specific user
+    public boolean renewLoanForUser(String username, String ISBN) {
+        for (Loan loan : activeLoans) {
+            if (loan.getISBN().equals(ISBN) && loan.getUsername().equals(username)) {
+                loan.extendDueDate();
+                System.out.println("Loan renewed for book with ISBN: " + ISBN + " by user: " + username);
+                return true;
+            }
         }
-
-        System.out.println("No active loan found for ISBN: " + ISBN);
+        System.out.println("No active loan found for ISBN: " + ISBN + " associated with user: " + username);
         return false;
     }
-    
+
+
     // Return a loan
     public void returnLoan(Book book) {
-       for (Loan loan : loans) {
+        Loan loanToReturn = null;
+
+        for (Loan loan : activeLoans) {
             if (loan.getISBN().equals(book.getISBN())) {
-                book.setAvailable(true); 
-                FeeCalculation due = new  FeeCalculation();
-                double pay=0;
-                pay+=due.calculateFees(loan.getDueDate(),loan.getReturnDate());
-                loans.remove(loan); 
-                System.out.println(book.getTitle() + " returned.\n");
-                System.out.println("must pay "+ pay +" immediately\n");
-                return;
+                loanToReturn = loan;
+                break;
             }
+        }
+
+        if (loanToReturn != null) {
+            book.setAvailable(true);
+            loanToReturn.setReturnDate();
+            activeLoans.remove(loanToReturn); // Remove from active loans
+            System.out.println("Book returned: " + book.getTitle());
+        } else {
+            System.out.println("No active loan found for book: " + book.getTitle());
+        }
+    }
+
+    // View all loans (active and historical)
+    public void viewAllLoans() {
+        loanHistory.viewLoanHistory();
+    }
+    
+    public LoanHistory getLoanHistory() {
+        return loanHistory;
+    }
+    
+
+    public List<Loan> getOverdueLoansForUser(String username) {
+        return activeLoans.stream()
+                .filter(loan -> loan.getUsername().equals(username) &&
+                                loan.getDueDate().isBefore(LocalDate.now()))
+                .collect(Collectors.toList());
+    }
+
+    public void markFeeAsPaid(Loan loan) {
+        System.out.println("Fee marked as paid for loan: " + loan);
     }
 }
-}
+

@@ -5,88 +5,115 @@
  * 
  * Edit: Quan Luu 11/27/2024
  * Added new variable bookCount to keep track of number of books. Made changes to addBook and removeBook. Added helper functions getBookCount, and bookExist.
+ * 
+ * Edit: Quan Luu 12/1/2024
+ * Updated addBook and removeBook. Deleted helper function bookExist.
  */
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookManager
-{
+public class BookManager {
     private List<Book> books;
-    private int bookCount; // Keeps track of how many book is in the catalog
+    private static final String BOOKS_FILE = "books.txt";
 
-    public BookManager()
-    {
+    public BookManager() {
         this.books = new ArrayList<>();
-        bookCount = 0;
+        loadBooksFromFile();
     }
 
-    public void addBook(String title, String author, String genre, String ISBN) 
-    {
-    	int exsists = bookExist(ISBN);
-    	
-    	if(exsists == 0) // If the book does not exist (using ISBN to check) then add new Book.
-    	{
-    		Book newBook = new Book(title, author, genre, ISBN);
-    		books.add(newBook);
-    		bookCount++;
-    	}
-    	else // If the book exist (using ISBN to check) make changes to the already existing book.
-    	{
-    		books.get(exsists).setTitle(title);
-    		books.get(exsists).setAuthor(author);
-    		books.get(exsists).setGenre(genre);
-    		books.get(exsists).setISBN(ISBN);
-    	}
+    // Load books from the file
+    void loadBooksFromFile() {
+        File file = new File(BOOKS_FILE);
+        if (!file.exists()) {
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";"); // Use semicolon as delimiter
+                if (parts.length == 6) {
+                    String title = parts[0];
+                    String author = parts[1];
+                    String genre = parts[2];
+                    String ISBN = parts[3];
+                    boolean isAvailable = Boolean.parseBoolean(parts[4]);
+                    boolean isReserved = Boolean.parseBoolean(parts[5]);
+                    books.add(new Book(title, author, genre, ISBN, isAvailable, isReserved));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void removeBook(String ISBN)
-    {
-    	int exsists = bookExist(ISBN); // Checks to see if the book exist before removal.
-    	if(exsists != 0) // If the book does exist remove it.
-    	{
-    		books.removeIf(book -> book.getISBN().equals(ISBN));
-    		bookCount--;
-    	}
+    // Save books to the file
+    void saveBooksToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(BOOKS_FILE))) {
+            for (Book book : books) {
+                writer.write(String.join(";", book.getTitle(), book.getAuthor(), book.getGenre(), book.getISBN(),
+                        String.valueOf(book.isAvailable()), String.valueOf(book.isReserved())));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    // Add a book
+    public void addBook(String title, String author, String genre, String ISBN) {
+        if (searchBookByISBN(ISBN) != null) {
+            throw new IllegalArgumentException("Book with the given ISBN already exists.");
+        }
+
+        Book newBook = new Book(title, author, genre, ISBN, true, false);
+        books.add(newBook);
+        saveBooksToFile(); // Save changes to file
+    }
+
+    // Remove a book
+    public void removeBook(String ISBN) {
+        Book book = searchBookByISBN(ISBN);
+        if (book != null) {
+            books.remove(book);
+            saveBooksToFile(); 
+        }
+    }
+
+    // Reserve a book
+    public void reserveBook(String ISBN) {
+        Book book = searchBookByISBN(ISBN);
+        if (book != null && book.isAvailable() && !book.isReserved()) {
+            book.setReserved(true);
+            book.setAvailable(false);
+            saveBooksToFile(); 
+        }
+    }
+
+    // Search for a book by title
     public Book searchBook(String title) {
         for (Book book : books) {
             if (book.getTitle().equalsIgnoreCase(title)) {
                 return book;
             }
         }
-        return null; // Book not found
+        return null;
     }
 
-    public List<Book> getAllBooks()
-    {
-        return books;
-    }
-
-    // Method to search for a book by ISBN
-    public Book searchBookByISBN(String ISBN) 
-    {
+    // Search for a book by ISBN
+    public Book searchBookByISBN(String ISBN) {
         for (Book book : books) {
             if (book.getISBN().equals(ISBN)) {
                 return book;
             }
         }
-        return null; // Book not found
+        return null;
     }
-    
-    
-    public int getBookCount() // Returns the number of book in the catalog.
-    {
-    	return bookCount;
-    }
-    
-    public int bookExist(String ISBN) // Checks to see if the book exist in the list. Returns the position of the found ISBN.
-    {
-    	for(int i = 0; i < bookCount; i++)
-    		if(books.get(i).getISBN().equalsIgnoreCase(ISBN))
-    			return i;
-    	
-    	return 0; // Returns 0 if the book does not exist.
-    		
+
+    // Get all books
+    public List<Book> getAllBooks() {
+        return new ArrayList<>(books);
     }
 }

@@ -1,3 +1,8 @@
+/*
+ * Author: moeikrey (A.S.) 12/1/24
+ * Loan constructor
+ */
+
 import java.time.LocalDate;
 
 public class Loan {
@@ -5,16 +10,18 @@ public class Loan {
     private LocalDate loanDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
-    private boolean isReserved;
+    private String username; // The user who took the loan
 
-    public Loan(String ISBN, LocalDate loanDate) {
+    // Constructor
+    public Loan(String ISBN, LocalDate loanDate, String username) {
         this.ISBN = ISBN;
         this.loanDate = loanDate;
         this.dueDate = loanDate.plusWeeks(2); // Default due date is 2 weeks after loan date
-        this.returnDate = null; 
-        this.isReserved = false; 
+        this.returnDate = null;
+        this.username = username;
     }
 
+    // Getters
     public String getISBN() {
         return ISBN;
     }
@@ -31,8 +38,8 @@ public class Loan {
         return returnDate;
     }
 
-    public boolean isReserved() {
-        return isReserved;
+    public String getUsername() {
+        return username;
     }
 
     // Extend the due date by 2 weeks
@@ -51,17 +58,13 @@ public class Loan {
         this.returnDate = LocalDate.now();
     }
 
-    // Set reserved status
-    public void setReserved(boolean reserved) {
-        this.isReserved = reserved;
-    }
-
     @Override
     public String toString() {
         return "Loan [ISBN=" + ISBN +
                ", Loan Date=" + loanDate +
                ", Due Date=" + dueDate +
                (returnDate != null ? ", Return Date=" + returnDate : ", Not Returned") +
-               ", Reserved=" + isReserved + "]";
+               ", User=" + username + "]";
     }
 }
+
