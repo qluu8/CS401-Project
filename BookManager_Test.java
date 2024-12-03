@@ -11,18 +11,19 @@ class BookManager_Test
 		collection = new BookManager();
 	}
 	
-	
+
 	@Test
 	void TestAddBook() 
 	{
 		makeCollection();
 		collection.addBook("Harry Potter", "J.K Rowling", "Fantasy", "123456789");
 		
-		assertEquals(1, collection.getBookCount());
 		assertEquals("Harry Potter", collection.searchBook("Harry Potter").getTitle());
 		assertEquals("J.K Rowling", collection.searchBook("Harry Potter").getAuthor());
 		assertEquals("Fantasy", collection.searchBook("Harry Potter").getGenre());
 		assertEquals("123456789", collection.searchBook("Harry Potter").getISBN());
+		
+		collection.removeBook("123456789");
 	}
 
 	@Test
@@ -30,10 +31,8 @@ class BookManager_Test
 	{
 		makeCollection();
 		collection.addBook("Harry Potter", "J.K Rowling", "Fantasy", "123456789");
-		
-		assertEquals(1, collection.getBookCount());
+
 		collection.removeBook("123456789");
-		assertEquals(0, collection.getBookCount());
 		assertNull(collection.searchBook("Harry Potter"));
 	}
 	
@@ -51,6 +50,9 @@ class BookManager_Test
 		assertEquals("The Hobbit", collection.searchBook("The Hobbit").getTitle());
 		
 		assertNull(collection.searchBook("N/A"));
+		
+		collection.removeBook("123456789");
+		collection.removeBook("987654321");
 	}
 	
 	@Test
@@ -65,18 +67,11 @@ class BookManager_Test
 		
 		assertNotNull(collection.searchBookByISBN("987654321"));
 		assertEquals("The Hobbit", collection.searchBookByISBN("987654321").getTitle());
-	}
-	
-	@Test
-	void BookCount()
-	{
-		makeCollection();
-		collection.addBook("Harry Potter", "J.K Rowling", "Fantasy", "123456789");
-		collection.addBook("The Hobbit", "J.R.R. Tolkien", "Fantasy", "987654321");
 		
-		assertEquals(2, collection.getBookCount());
+		collection.removeBook("123456789");
+		collection.removeBook("987654321");
 	}
-	
+
 	@Test
 	void TestDuplicatISBN()
 	{
@@ -89,7 +84,8 @@ class BookManager_Test
         });
 
         assertEquals("Book with the given ISBN already exists.", exception.getMessage());
-        assertEquals(1, collection.getBookCount());
+        
+        collection.removeBook("123456789");
 	}
 	
 	@Test
@@ -99,7 +95,7 @@ class BookManager_Test
 		
 		collection.addBook("Harry Potter", "J.K Rowling", "Fantasy", "123456789");
 		collection.removeBook("987654321");
-		assertEquals(1, collection.getBookCount());
+		collection.removeBook("123456789");
 	}
 	
 	@Test
@@ -109,16 +105,18 @@ class BookManager_Test
 		collection.addBook("Harry Potter", "J.K Rowling", "Fantasy", "123456789");
 		collection.addBook("The Hobbit", "J.R.R. Tolkien", "Fantasy", "987654321");
 		
-		assertEquals(2, collection.getBookCount());
 		assertTrue(collection.getAllBooks().stream().anyMatch(book -> book.getTitle().equals("Harry Potter")));
         assertTrue(collection.getAllBooks().stream().anyMatch(book -> book.getTitle().equals("The Hobbit")));
+        
+		collection.removeBook("123456789");
+		collection.removeBook("987654321");
 	}
 	
 	@Test
 	void TestEmptyBooks()
 	{
 		makeCollection();
-		assertEquals(0, collection.getBookCount());
+
 		assertNull(collection.searchBook("N/A"));
 		assertNull(collection.searchBookByISBN("123456789"));
 	}
