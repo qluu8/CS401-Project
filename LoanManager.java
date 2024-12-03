@@ -1,5 +1,5 @@
 
-	/* Author: Christian Amoranto 11/28/24
+/* Author: Christian Amoranto 11/28/24
  * LoanManager class to handle loan methods
  * Added search and renewal methods
  * UPDATED 11/28/24 Darrell heim added loan/return method
@@ -9,6 +9,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.time.LocalDate;
 
 public class LoanManager {
@@ -94,4 +95,17 @@ public class LoanManager {
     public LoanHistory getLoanHistory() {
         return loanHistory;
     }
+    
+
+    public List<Loan> getOverdueLoansForUser(String username) {
+        return activeLoans.stream()
+                .filter(loan -> loan.getUsername().equals(username) &&
+                                loan.getDueDate().isBefore(LocalDate.now()))
+                .collect(Collectors.toList());
+    }
+
+    public void markFeeAsPaid(Loan loan) {
+        System.out.println("Fee marked as paid for loan: " + loan);
+    }
 }
+
