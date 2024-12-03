@@ -1,46 +1,46 @@
 // Added prompt for server IP address and defaults to localhost -moeikrey (A.S.) 12/1/24
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
+import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args) {
-        String host; 
-        int port = 8080; 
+        Scanner scanner = new Scanner(System.in);
 
-        try (BufferedReader console = new BufferedReader(new InputStreamReader(System.in))) {
-            System.out.print("Enter the server IP address (or press Enter for localhost): ");
-            host = console.readLine();
-            if (host.isEmpty()) {
-                host = "localhost"; // default to localhost if no input is provided
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading input: " + e.getMessage());
-            return; // Exit if there's an error reading input
+        // Prompt the user for the server's IP address and port
+        System.out.print("Enter the server IP address (or press Enter for localhost): ");
+        String host = scanner.nextLine().trim();
+        if (host.isEmpty()) {
+            host = "127.0.0.1"; // Default to localhost
         }
+
+        System.out.print("Enter the server port (default: 8080): ");
+        String portInput = scanner.nextLine().trim();
+        int port = portInput.isEmpty() ? 8080 : Integer.parseInt(portInput);
 
         try (Socket socket = new Socket(host, port);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader console = new BufferedReader(new InputStreamReader(System.in))) {
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
 
             System.out.println("Connected to the server!");
 
-            // Start a thread to listen for server messages
-            new Thread(() -> {
-                try {
-                    String serverResponse;
-                    while ((serverResponse = in.readLine()) != null) {
-                        System.out.println(serverResponse);
-                    }
-                } catch (IOException e) {
-                    System.out.println("Disconnected from the server.");
-                }
-            }).start();
+            // Read the server's welcome message and menu
+            String serverMessage;
+            while ((serverMessage = in.readLine()) != null) {
+                System.out.println(serverMessage);
 
-            // Send commands to the server
-            String userInput;
-            while ((userInput = console.readLine()) != null) {
-                out.println(userInput);
+                // Check if the server expects user input
+                if (serverMessage.toLowerCase().contains("enter your choice")) {
+                    String choice = scanner.nextLine();
+                    out.println(choice);
+
+                    // If GUI is chosen, handle GUI logic here
+                    if ("2".equals(choice.trim())) {
+                        System.out.println("Launching GUI...");
+                        new LibraryGUI(new BookManager(), new LoanManager(), new registration());
+                        break; // Exit console loop as GUI takes over
+                    }
+                }
             }
 
         } catch (IOException e) {
