@@ -62,8 +62,8 @@ public class registration {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
-            writer.write(username + "," + password + "," + role);
             writer.newLine();
+            writer.write(username + "," + password + "," + role);   
         }
         return true;
     }
